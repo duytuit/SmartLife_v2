@@ -27,7 +27,7 @@ const routes: Routes = [
       component: InfoAccountComponent
     },
    ],
-  canActivate: [AuthGuard] 
+  //canActivate: [AuthGuard] 
  }
 ];
 
