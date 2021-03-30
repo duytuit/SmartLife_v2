@@ -1,0 +1,219 @@
+<div class="abc" style="position: absolute;margin-left: -24px;width: 100%;">
+  <div class="add-script" style="position: fixed;top: 60px;z-index: 10;width: 100%;">
+    <div id="bar-device" class="row" style="height:38px;border-bottom: 1px solid #80808042;margin: 0;">
+      <div style="width: 33.3333%;">
+        <select #ChangeHubCode (change)="onEventHubCode($event.target.value)" class="form-control-sm custom-select"
+          style="width: 100%;margin-top: 3px">
+        </select>
+      </div>
+      <div style="width:33.3333%;">
+        <button type="submit" (click)="modalScriptDevice.show()" class="btn btn-block btn-info btn-sm" style="border-radius: 1.25rem;margin-top: 3px">
+          <i class="fas fa-plus-circle"></i>  Cài đặt kịch bản</button>
+      </div>
+      <div style="width: 33.3333%;">
+        <input class="form-control form-control-sm" style="border-radius: 1.25rem;margin-top: 3px" autocomplete="off"
+          placeholder="Tìm kiếm">
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+  <!-- <div *ngIf="_mqttDeviveService.showSpinner | async" id="pause"
+      class="d-flex align-items-center justify-content-center" style=" position: relative;">
+      <div id="spinner">
+      </div>
+    </div> -->
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-4" style=" display: contents">
+          <div class="mblock">
+            <div class="cblock">
+              tên kịch bản
+            </div>
+            <div class="cblock">
+              <img width="50" src="assets/Alarm-clock-icon.png">
+            </div>
+            <div class="cblock">
+              thiết bị điều khiển
+            </div>
+            <div class="cblock">
+              <div class="form-row" style="flex-wrap: inherit;">
+                <div class="form-group col-md-8">
+                  <button type="submit" class="btn btn-block btn-info btn-sm" style="height: 15px;
+                  padding-top: 2px;font-size: 0.5rem;">
+                    <i class="fa fa-pencil-square-o"></i> Sửa</button>
+                </div>
+                <div class="form-group col-md-4" style="height: 15px;">
+                  <button type="button" class="btn btn-block btn-secondary btn-sm" style="height: 15px;
+                  padding-top: 2px;font-size: 0.5rem;">
+                    <i class="far fa-trash-alt"></i> Xóa</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-modal #modalScriptDevice [modalTitle]="'Thêm kịch bản'" [width]="800" [zIndex]="zIndex+2"
+      [backgroundcolor]="'#007bff'" [keydownesc]="false" [closemodal]="false" [maximizable]="false"
+      [maximized]="false" [south]="false" [east]="false" [southEast]="false">
+      <ng-container class="app-modal-body">
+        
+              <form [formGroup]="addScript" (ngSubmit)="onSubmitaddScript()">
+                  <div formArrayName="conditional_script">
+                      <div class="row-script" *ngFor="let item of getArrayConditionalScript(); let i = index" [formGroupName]="i">
+                          <div style="padding: 15px 10px;">
+                              <div class="card-body-script">
+                                <div class="form-row">
+                                  <div class="form-group col-md-12 pm-15">
+                                    <label class="mf-0-small" style="float: left;">Cài đặt kiểu</label>
+                                    <select class="form-control form-control-sm" formControlName="type_script">
+                                      <option value=null selected>--Cài đặt kiểu--</option>
+                                      <option [ngValue]="true">Kịch Bản</option>
+                                      <option [ngValue]="false">Hẹn Giờ</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="form-row">
+                                  <div class="form-group col-md-4 pm-15" style="margin-top: -12px;">
+                                    <label class="mf-0-small" style="float: left;">Đặt giờ</label>
+                                    <input style="margin-top:20px;" class="form-control form-control-sm" type="time" value="00:00">
+                                  </div>
+                                  <div class="form-group col-md-8 pm-15">
+                                    <label class="mf-0-small" style="float: left;display: contents;">Các ngày trong tuần</label>
+                                    <div class="Allday" style="display: flex;margin-top: 7px;">
+                                      <a class="btn nav-link script-collapse">
+                                        T2
+                                      </a>
+                                      <a class="btn nav-link script-collapse">
+                                        T3
+                                      </a>
+                                      <a class="btn nav-link script-collapse">
+                                        T4
+                                      </a>
+                                      <a class="btn nav-link script-collapse">
+                                        T5
+                                      </a>
+                                      <a class="btn nav-link script-collapse">
+                                        T6
+                                      </a>
+                                      <a class="btn nav-link script-collapse">
+                                        T7
+                                      </a>
+                                      <a class="btn nav-link script-collapse">
+                                        CN
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                                  <div class="form-row">
+                                      <div class="form-group col-md-3 pm-15">
+                                        <label class="mf-0-small">Tên kịch bản</label>
+                                        <input class="form-control form-control-sm" formControlName="name_script"
+                                          placeholder="tên kịch bản">
+                                      </div>
+                                      <div class="form-group col-md-3 pm-15">
+                                          <label class="mf-0-small">Tên thiết bị</label>
+                                          <select #ChangeDevice (change)="onEventDevice($event.target.value)" class="form-control form-control-sm">
+                                          <option *ngFor="let item of GetAllDevice" value="{{item.id}}">{{item.name_device}}</option>
+                                        </select>
+                                        </div>
+                                      <div class="form-group col-md-3 pm-15">
+                                        <label class="mf-0-small">Công tắc</label>
+                                        <input class="form-control form-control-sm"
+                                          formControlName="device_conditional_switch" placeholder="công tắc">
+                                      </div>
+                                      <div class="form-group col-md-3 pm-15">
+                                        <label class="mf-0-small">Điều kiện</label>
+                                        <select class="form-control form-control-sm" formControlName="device_conditional_switch_status">
+                                          <option value=null selected>--Trạng thái--</option>
+                                          <option [ngValue]="true">Bật</option>
+                                          <option [ngValue]="false">Tắt</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-12" style="margin-top: 4px;padding: 0;margin-bottom:3px;">
+                                      <a class="btn nav-link" title="thêm thiết bị"
+                                          style="cursor: pointer;background-color: #a9a9a973;padding: 0px;" (click)="addDeviceAction()">
+                                          <i class="fas fa-plus-circle" style="color: #17a2b8;"></i>
+                                      </a>
+                                  </div>
+                              </div>
+                              <div class="card-body">
+                                  <div formArrayName="device_action">
+                                      <div class="line-horz" *ngFor="let item of getArrayDeviceAction(); let j = index" [formGroupName]="j">
+                                          <div class="form-row">
+                                              <div class="form-group col-md-3 pm-15">
+                                                <label class="mf-0-small">Thiết bị điều khiển</label>
+                                                <select #ChangeDevice (change)="onEventDeviceAction($event.target.value)" class="form-control form-control-sm">
+                                                  <option *ngFor="let item of GetAllDevice" value="{{item.id}}">{{item.name_device}}</option>
+                                                </select>
+                                              </div>
+                                              <div class="form-group col-md-3 pm-15">
+                                                <label class="mf-0-small">Công tắc</label>
+                                                <input class="form-control form-control-sm"
+                                                  formControlName="device_switch" placeholder="công tắc">
+                                              </div>
+                                              <div class="form-group col-md-3 pm-15">
+                                                <label class="mf-0-small">Trạng thái</label>
+                                                <select class="form-control form-control-sm" formControlName="device_status">
+                                                  <option value=null selected>--Trạng thái--</option>
+                                                  <option [ngValue]="true">Bật</option>
+                                                  <option [ngValue]="false">Tắt</option>
+                                                </select>
+                                              </div>
+                                              <div class="form-group col-md-3 pm-15">
+                                                  <label class="mf-0-small"></label>
+                                                  <button type="button" class="btn btn-block btn-info btn-sm" (click)="removeDeviceAction(j)">
+                                                      <i class="far fa-trash-alt" style="font-size: 1.1rem;color:#d7e1ea;"> </i>  Xóa</button>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-8">
+                          <button #statusSaveDevice type="submit" class="btn btn-block btn-info btn-sm">
+                            <i class="fa fa-floppy-o"></i> Lưu</button>
+                        </div>
+                        <div class="form-group col-md-4">
+                          <button type="button" (click)="modalScriptDevice.hide()" class="btn btn-block btn-secondary btn-sm">
+                            <i class="fa fa-repeat"></i>Đóng</button>
+                        </div>
+                      </div>
+                  </div>
+              </form>
+      </ng-container>
+      <ng-container class="app-modal-footer">
+        <input type="hidden" (click)="modalScriptDevice.show()" id="modalScriptDeviceShow">
+        <input type="hidden" (click)="modalScriptDevice.hide()" id="modalScriptDeviceClose">
+      </ng-container>
+    </app-modal>
+    <app-modal #modalDelete [modalTitle]="'Bạn có muốn xóa không !'" [width]="400" [zIndex]="zIndex"
+      [backgroundcolor]="'#007bff'" [keydownesc]="true" [closemodal]="false" [maximizable]="false"
+      [maximized]="false" [south]="false" [east]="false" [southEast]="false">
+      <ng-container class="app-t-header">
+      </ng-container>
+      <ng-container class="app-modal-body">
+        <div class="form-row">
+          <div class="form-group"></div>
+        </div>
+      </ng-container>
+      <ng-container class="app-modal-footer">
+        <button type="button" #onDeletebevice  style="width: 75px;"
+          class="btn btn-info btn-sm">
+          <i class="far fa-save tu"></i>
+          Xóa</button>
+        <button type="button" class="btn btn-info btn-sm" style="float: right;" (click)="modalDelete.hide()">
+          <i class="far fa-times-circle"></i>
+          Thoát</button>
+        <input type="hidden" (click)="modalDelete.show()" id="modalDelete">
+        <input type="hidden" (click)="modalDelete.hide()" id="modalDeleteHide">
+      </ng-container>
+    </app-modal>
+  <app-toaster-container></app-toaster-container>
+</div>

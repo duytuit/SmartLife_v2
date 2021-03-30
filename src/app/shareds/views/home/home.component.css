@@ -1,0 +1,116 @@
+
+.custom-select {
+    display: inline-block;
+    width: 100%;
+    color: #495057;
+    padding: 0;
+    height: calc(1.5em + .75rem + -5px);
+    border: 1px solid #ced4da;
+    border-radius: 1.25rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.mblock{
+    width: 265px;
+    display: inline-block;
+    height: 110px;
+    text-align: center;
+    margin: 10px;
+    background-color: #FFF;
+    border: 0.5px solid #95959583;
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+   
+  }
+  /* .col-md-4{
+    display: contents;
+  } */
+  .col-md-12{
+    text-align: center;
+  }
+ 
+  .cblock{
+    display: block;
+    font-weight: bold;
+  }
+  .mblock:hover{
+    width: 265px;
+    display: inline-block;
+    height: 110px;
+    text-align: center;
+    margin: 10px;
+    background-color: #8aabf1;
+    border: 0.5px solid #95959583;
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+  }
+  .fa-home{
+    color: #4267b2;
+  }
+
+  /* add toggle button*/
+.toggle-global {
+  display: block;
+  position: relative;
+  width: 80px;
+  float: right;
+}
+
+input[type="checkbox"] {
+  display: none; 
+}
+
+
+.toggle-button-switch {
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 35px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 100%;
+  cursor: pointer;
+  z-index: 100;
+  transition: left 0.3s;
+}
+
+
+.toggle-button-text {
+  overflow: hidden;
+  background-color: #fc3164;
+  border-radius: 25px;
+  box-shadow: 2px 2px 5px 0 rgba(50, 50, 50, 0.75);
+  transition: background-color 0.3s;
+}
+
+
+.toggle-button-text-on,
+.toggle-button-text-off {
+  float: left;
+  width: 50%;
+  height: 100%;
+  line-height: 25px;
+  font-family: Lato, sans-serif;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+}
+
+
+input[type="checkbox"]:checked ~ .toggle-button-switch {
+  left: 43px;
+}
+
+
+input[type="checkbox"]:checked ~ .toggle-button-text {
+  background-color: #3dbf87;
+}
+/* .wrapper main .pages {
+  overflow: auto;
+  background-color: #f2f3f8;
+  margin-top: 30px!important;
+} */

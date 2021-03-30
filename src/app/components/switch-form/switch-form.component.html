@@ -1,0 +1,29 @@
+<form [formGroup]="formdevice" (ngSubmit)="onSubmitBodieukhien()">
+    <div class="form-row">
+        <input type="text" placeholder="Untitled Question" formControlName="name_device">
+    </div>
+    <div class="form-row">
+        <input type="text" placeholder="Untitled Question" formControlName="code_device">
+    </div>
+    <div class="form-row">
+        <input type="text" placeholder="Untitled Question" formControlName="device_type">
+    </div>
+    <div class="form-row">
+        <input type="text" placeholder="Untitled Question" formControlName="hubid">
+    </div>
+    <!---Survey Section -->
+    <div style="margin-left: 200px;" formArrayName="number_switch">
+        <div  *ngFor="let question of getArrayControlsDevice(); let i = index" [formGroupName]="i">
+            
+            <div class="form-row">
+                <input type="text" placeholder="Untitled Question" formControlName="name_switch">
+            </div>
+            <div class="form-row">
+                <input type="text" placeholder="icon" formControlName="icon">
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <button class="btn btn-block btn-info btn-sm" type="submit">Lưu</button>
+    </div>
+</form>

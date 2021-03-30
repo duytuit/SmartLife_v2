@@ -1,0 +1,97 @@
+
+
+<div class="abc" style="position: absolute;margin-left: -24px;width: 100%;">
+    <div class="add-script" style="position: fixed;top: 60px;z-index: 10;width: 100%;">
+        <button type="button" class="btn btn-block btn-info btn-sm" (click)="addConditionalScript()"> Add Kịch bản</button>
+    </div>
+</div>
+<div class="accordion" id="accordionExample">
+    <div class="card">
+        <form [formGroup]="addScript" (ngSubmit)="onSubmitaddScript()">
+            <div formArrayName="conditional_script">
+                <div class="row-script" *ngFor="let item of getArrayConditionalScript(); let i = index" [formGroupName]="i">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <div class="btn btn-link text-left" style="width:165px;">
+                                {{item.name_script}}
+                            </div>
+                            <div style="float: right;display: inline-flex;">
+                                <a class="btn nav-link script-collapse" style="padding-top: 10px;margin-right: 5px;">
+                                    <i class="fas fa-save" style="font-size: 1.1rem;color: #d7e1ea;"></i>
+                                </a>
+                                <a class="btn nav-link script-collapse" style="padding-top: 10px;margin-right: 5px;">
+                                    <i class="far fa-trash-alt" style="font-size: 1.1rem;color: #d7e1ea;"></i>
+                                </a>
+                                <!-- <a class="btn nav-link script-collapse collapsed" type="button" data-toggle="collapse"
+                                    data-target="#collapseOne{{i}}" aria-expanded="false" aria-controls="collapseOnei" >
+                                    <i class="fas fa-angle-down fa-2x" style="color: #d7e1ea;"></i>
+                                </a> -->
+                            </div>
+                        </h2>
+                    </div>
+                    <div id="collapseOne{{i}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample"
+                        style="padding: 15px 10px;">
+                        <div class="card-body-script">
+                            <div class="form-row">
+                                <div class="form-group col-md-3 pm-15">
+                                  <label class="mf-0-small">Tên kịch bản</label>
+                                  <input class="form-control form-control-sm" formControlName="name_script"
+                                    placeholder="tên kịch bản">
+                                </div>
+                                <div class="form-group col-md-3 pm-15">
+                                    <label class="mf-0-small">Tên thiết bị</label>
+                                    <input class="form-control form-control-sm"
+                                      formControlName="device_conditional" placeholder="tên thiết bị">
+                                  </div>
+                                <div class="form-group col-md-3 pm-15">
+                                  <label class="mf-0-small">Công tắc</label>
+                                  <input class="form-control form-control-sm"
+                                    formControlName="device_conditional_switch" placeholder="công tắc">
+                                </div>
+                                <div class="form-group col-md-3 pm-15">
+                                  <label class="mf-0-small">Điều kiện</label>
+                                  <input class="form-control form-control-sm"
+                                    formControlName="device_conditional_switch_status" placeholder="trạng thái">
+                                </div>
+                              </div>
+                              <div class="col-md-12" style="margin-top: 4px;padding: 0;margin-bottom:3px;">
+                                <a class="btn nav-link" title="thêm thiết bị"
+                                    style="cursor: pointer;background-color: #a9a9a973;padding: 0px;" (click)="addDeviceAction()">
+                                    <i class="fas fa-plus-circle" style="color: #17a2b8;"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div formArrayName="device_action">
+                                <div class="line-horz" *ngFor="let item of getArrayDeviceAction(); let j = index" [formGroupName]="j">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3 pm-15">
+                                          <label class="mf-0-small">Thiết bị điều khiển</label>
+                                          <input class="form-control form-control-sm" formControlName="device_control"
+                                            placeholder="thiết bị điều khiển">
+                                        </div>
+                                        <div class="form-group col-md-3 pm-15">
+                                          <label class="mf-0-small">Công tắc</label>
+                                          <input class="form-control form-control-sm"
+                                            formControlName="device_switch" placeholder="công tắc">
+                                        </div>
+                                        <div class="form-group col-md-3 pm-15">
+                                          <label class="mf-0-small">Trạng thái</label>
+                                          <input class="form-control form-control-sm"
+                                            formControlName="device_status" placeholder="trạng thái">
+                                        </div>
+                                        <div class="form-group col-md-3 pm-15">
+                                            <label class="mf-0-small"></label>
+                                            <button type="button" class="btn btn-block btn-info btn-sm" (click)="removeDeviceAction(j)">
+                                                <i class="far fa-trash-alt" style="font-size: 1.1rem;color:#d7e1ea;"> </i>  Xóa</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,254 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div class="wrapper default-theme" [ngClass]="getClasses()">
+  <app-navbar (EventScriptDeviceClicked)="EventScriptDeviceClicked()" (EventDeviceClicked)="EventDeviceClicked()"
+    (EventSetupDeviceClicked)="EventSetupDeviceClicked()"></app-navbar>
+  <!-- Bar-hub -->
+  <div id="bar-device" class="row" style="height:38px;border-bottom: 1px solid #80808042;margin: 0;">
+    <div style="width: 30%;">
+      <select #ChangeHubCode (change)="onEventHubCode($event.target.value)" class="form-control-sm custom-select"
+        style="width: 100%;margin-top: 3px">
+        <option *ngFor="let item of GetAllUserHub" value="{{item.hubid}}">{{item.note}}</option>
+      </select>
+    </div>
+    <div style="width:40%;">
+      <button type="submit" class="btn btn-block btn-info btn-sm" style="border-radius: 1.25rem;margin-top: 3px"
+        (click)="SearchDevice()">
+        <i class="fa fa-search"></i> Add Thiết Bị</button>
+    </div>
+    <div style="width: 22%;">
+      <input class="form-control form-control-sm" [(ngModel)]="FilterDevice"
+        style="border-radius: 1.25rem;margin-top: 3px" autocomplete="off" placeholder="Tìm kiếm">
+    </div>
+    <div style="width: 8%;">
+      <a class="btn nav-link" style="padding: 8px 0px;">
+        <i class="fas fa-wifi" style="color: #17a2b8;"></i>
+      </a>
+    </div>
+  </div>
+  <main>
+    <div id="pages-container" class="pages container-fluid pt-4 pb-4 pl-4 pr-4 ">
+      <div id="router-outlet-content">
+        <router-outlet></router-outlet>
+      </div>
+      <div id="device-content">
+        <div *ngIf="_mqttDeviveService.showSpinner | async" id="pause"
+          class="d-flex align-items-center justify-content-center" style=" position: relative;">
+          <div id="spinner">
+          </div>
+        </div>
+        <div *ngIf="!(_mqttDeviveService.showSpinner | async)" class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-4" style=" display: contents">
+                <div *ngFor="let item of FGetAllDevice" class="mblock">
+                  <div class="cblock" (click)="RemoteDevice(item)">
+                    {{item.name_device}}
+                  </div>
+                  <div class="cblock" (click)="RemoteDevice(item)">
+                    <img width="50" src="assets/32officeicons-1_89729.png">
+                  </div>
+                  <div class="cblock">
+                    {{item.device_type}} : Công tắc
+                  </div>
+                  <div class="cblock">
+                    <div class="form-row" style="flex-wrap: inherit;">
+                      <div class="form-group col-md-8">
+                        <button type="submit" class="btn btn-block btn-info btn-sm" style="height: 15px;
+                      padding-top: 2px;font-size: 0.5rem;" (click)="openEditDevice(item)">
+                          <i class="fa fa-pencil-square-o"></i> Sửa</button>
+                      </div>
+                      <div class="form-group col-md-4" style="height: 15px;">
+                        <button type="button" class="btn btn-block btn-secondary btn-sm" style="height: 15px;
+                      padding-top: 2px;font-size: 0.5rem;" (click)="openDeleteDevice(item)">
+                          <i class="far fa-trash-alt"></i> Xóa</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <app-modal #modalRemote [modalTitle]="'Remote'" [width]="500" [zIndex]="zIndex" [backgroundcolor]="'#4267b2'"
+          [keydownesc]="true" [closemodal]="true" [maximizable]="false" [maximized]="false" [south]="false"
+          [east]="false" [southEast]="false">
+          <ng-container class="app-t-header">
+          </ng-container>
+          <ng-container class="app-modal-body">
+            <div *ngIf="showSpinner | async" id="pause" class="d-flex align-items-center justify-content-center"
+              style=" position: relative;height:300px">
+              <div id="spinner">
+              </div>
+            </div>
+            <table *ngIf="!(showSpinner | async)" class="table table-sm">
+              <tbody>
+                <div *ngFor="let item of GetSwitch ;let i = index;" id="{{i}}"
+                  style="display:flow-root;margin-bottom: 20px;">
+                  {{item.name_switch}}
+                  <div class="toggle-global">
+                    <input type="checkbox" id="toggle-button-checkbox-{{i}}">
+                    <label class="toggle-button-switch" id="status-{{i}}" (click)="ChangeStatusSwitch(item,i)"
+                      for="toggle-button-checkbox-{{i}}"
+                      [ngStyle]="{'left': item.status_switch==1?'43px' : '5px' }"></label>
+                    <div class="toggle-button-text" id="text-{{i}}"
+                      [ngStyle]="{'background-color': item.status_switch==1?'#3dbf87' : '#fc3164' }">
+                      <div class="toggle-button-text-on">ON</div>
+                      <div class="toggle-button-text-off">OFF</div>
+                    </div>
+                  </div>
+                </div>
+              </tbody>
+            </table>
+          </ng-container>
+          <ng-container class="app-modal-footer">
+            <input type="hidden" (click)="modalRemote.show()" id="modalRemoteShow">
+            <input type="hidden" (click)="modalRemote.hide()" id="modalRemoteClose">
+          </ng-container>
+        </app-modal>
+        <app-modal #modalDevice [modalTitle]="'Thêm thiết bị'" [width]="800" [zIndex]="zIndex+2"
+          [backgroundcolor]="'#007bff'" [keydownesc]="false" [closemodal]="false" [maximizable]="false"
+          [maximized]="false" [south]="false" [east]="false" [southEast]="false">
+          <!-- <ng-container class="app-t-header">
+     
+    </ng-container> -->
+          <ng-container class="app-modal-body">
+            <form class="emp-form" [formGroup]="addDevice" (ngSubmit)="onSubmitDevice()">
+              <div class="form-row">
+                <div class="form-group col-md-4 pm-15">
+                  <label class="mf-0-small">Tên thiết bị</label>
+                  <input class="form-control form-control-sm" autocomplete="off" formControlName="name_device"
+                    placeholder="Tên Thiết Bị">
+                </div>
+                <div class="form-group col-md-4 pm-15">
+                  <label class="mf-0-small">ID thiết bị</label>
+                  <input class="form-control form-control-sm" [attr.disabled]="true" autocomplete="off"
+                    formControlName="code_device" placeholder="ID_Device">
+                </div>
+                <div class="form-group col-md-4 pm-15">
+                  <label class="mf-0-small">Kiểu thiết bị</label>
+                  <input class="form-control form-control-sm" [attr.disabled]="true" autocomplete="off"
+                    formControlName="device_type" placeholder="device_type">
+                </div>
+              </div>
+              <div class="form-group pm-15">
+                <label class="mf-0-small">Công tắc</label>
+                <div formArrayName="number_switch">
+                  <div class="form-row" *ngFor="let item of getArrayControlsDevice(); let i = index"
+                    [formGroupName]="i">
+                    <div class="form-group col-md-6">
+                      <input class="form-control form-control-sm" placeholder="tên công tắc {{i}}"
+                        formControlName="name_switch">
+                    </div>
+                    <div class="form-group col-md-4">
+                      <input class="form-control form-control-sm" placeholder="tên hình ảnh công tắc {{i}}"
+                        formControlName="icon">
+                    </div>
+                    <div class="form-group col-md-2">
+                      <label class="btn btn-info form-control form-control-sm" title="Upload hình ảnh công tắc {{i}}"
+                        style="background-color: #adb5bd;border-color: #adb5bd;">
+                        Tải hình ảnh công tắc {{i}}
+                        <input type="file" (change)="onFileUpload($event,i)" style="display: none" />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="form-group pm-15">
+            <label class="mf-0-small">Hình ảnh</label>
+            <input class="form-control form-control-sm" autocomplete="off" formControlName="icon" placeholder="icon">
+          </div> -->
+              <div class="form-group pm-15">
+                <label class="mf-0-small">Ghi chú</label>
+                <input class="form-control form-control-sm" autocomplete="off" formControlName="note"
+                  placeholder="Ghi chú">
+              </div>
+              <div class="form-group pm-15">
+                <label class="mf-0-small">Trạng thái</label>
+                <select class="form-control form-control-sm" formControlName="status">
+                  <option value=null selected>--Trạng thái--</option>
+                  <option [ngValue]="true">Kích hoạt</option>
+                  <option [ngValue]="false">Khóa</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <button #statusSaveDevice type="submit" class="btn btn-block btn-info btn-sm">
+                    <i class="fa fa-floppy-o"></i> Lưu</button>
+                </div>
+                <div class="form-group col-md-4">
+                  <button type="button" class="btn btn-block btn-secondary btn-sm" (click)="CloseDevice()">
+                    <i class="fa fa-repeat"></i>Đóng</button>
+                </div>
+              </div>
+            </form>
+          </ng-container>
+          <ng-container class="app-modal-footer">
+            <input type="hidden" (click)="modalDevice.show()" id="modalDeviceShow">
+            <input type="hidden" (click)="modalDevice.hide()" id="modalDeviceClose">
+          </ng-container>
+        </app-modal>
+        <app-modal #modalFindDevice [modalTitle]="'Chế độ cài đặt'" [width]="400" [zIndex]="zIndex"
+          [backgroundcolor]="'#007bff'" [keydownesc]="false" [closemodal]="false" [maximizable]="false"
+          [maximized]="false" [south]="false" [east]="false" [southEast]="false">
+          <ng-container class="app-t-header">
+          </ng-container>
+          <ng-container class="app-modal-body">
+            <div *ngIf="showSpinner | async" id="pause" class="d-flex align-items-center justify-content-center"
+              style=" position: relative;height:300px">
+              <div id="spinner">
+              </div>
+            </div>
+            <div *ngIf="!(showSpinner | async)" class="form-row">
+              <div class="form-group">ID thiết bị: {{ResultIDdevice}}</div>
+            </div>
+            <div *ngIf="!(showSpinner | async)" class="form-row">
+              <div class="form-group">Kiểu thiết bị: {{ResultTypedevice}}</div>
+            </div>
+          </ng-container>
+          <ng-container class="app-modal-footer">
+            <div class="form-row">
+              <div class="form-group col-md-8">
+                <button type="button" (click)="FindDevice()" class="btn btn-block btn-info btn-sm">
+                  <i class="far fa-save tu"></i>
+                  Xác Nhận</button>
+              </div>
+              <div class="form-group col-md-4">
+                <button type="button" class="btn btn-block btn-secondary btn-sm" (click)="CloseFindDevice()">
+                  <i class="far fa-times-circle"></i>
+                  Đóng</button>
+              </div>
+            </div>
+            <input type="hidden" (click)="modalFindDevice.show()" id="modalFindDeviceShow">
+            <input type="hidden" (click)="modalFindDevice.hide()" id="modalFindDeviceHide">
+          </ng-container>
+        </app-modal>
+        <app-modal #modalDelete [modalTitle]="'Bạn có muốn xóa không !'" [width]="400" [zIndex]="zIndex"
+          [backgroundcolor]="'#007bff'" [keydownesc]="true" [closemodal]="false" [maximizable]="false"
+          [maximized]="false" [south]="false" [east]="false" [southEast]="false">
+          <ng-container class="app-t-header">
+          </ng-container>
+          <ng-container class="app-modal-body">
+            <div class="form-row">
+              <div class="form-group">{{selectdevice.name_device}}</div>
+            </div>
+          </ng-container>
+          <ng-container class="app-modal-footer">
+            <button type="button" #onDeletebevice (click)="onDeleteDevice(selectdevice.id)" style="width: 75px;"
+              class="btn btn-info btn-sm">
+              <i class="far fa-save tu"></i>
+              Xóa</button>
+            <button type="button" class="btn btn-info btn-sm" style="float: right;" (click)="modalDelete.hide()">
+              <i class="far fa-times-circle"></i>
+              Thoát</button>
+            <input type="hidden" (click)="modalDelete.show()" id="modalDelete">
+            <input type="hidden" (click)="modalDelete.hide()" id="modalDeleteHide">
+          </ng-container>
+        </app-modal>
+        <app-toaster-container></app-toaster-container>
+      </div>
+
+      <hr>
+      <app-footer></app-footer>
+    </div>
+  </main>
+</div>

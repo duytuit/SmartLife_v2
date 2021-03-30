@@ -1,0 +1,40 @@
+
+.mblock{
+    width: 145px;
+    display: inline-block;
+    height: 110px;
+    text-align: center;
+    margin: 10px;
+    background-color: #FFF;
+    border: 0.5px solid #95959583;
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+   
+  }
+  .col-md-4{
+    display: contents;
+  }
+  .col-md-12{
+    text-align: center;
+  }
+ 
+  .cblock{
+    display: block;
+    font-weight: bold;
+  }
+  .mblock:hover{
+    width: 145px;
+    display: inline-block;
+    height: 110px;
+    text-align: center;
+    margin: 10px;
+    background-color: #8aabf1;
+    border: 0.5px solid #95959583;
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+  }
+  .fa-home{
+    color: #4267b2;
+  }
